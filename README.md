@@ -1,3 +1,12 @@
+Branch:
+https://github.com/sysarchitek/DataBox.raspberry-pi-web-simulator
+Solution:
+https://github.com/sysarchitek/DataBox-IOT-Emulator
+
+author: Francois TURI
+
+---
+Based on the work of:
 ---
 services: iot-hub
 platforms: node

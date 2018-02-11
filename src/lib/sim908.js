@@ -1,26 +1,11 @@
-//import {MY} from './myconsole.js';
-//import {mylog} from './my.js';
-//import {} from react-native-fs;
-
 class SIM908  {
 	
 	
 	constructor() {
-	//this.console=new MY();
-		//super();
-	//this.myconsole("SIM908 constructor");
     this.readSensorData = this.readSensorData.bind(this);
-    //this.move=this.move.bind(this);
     this.init = this.init.bind(this);
     this.getState=this.getState.bind(this);
     this.setState=this.setState.bind(this);
-    //this.myconsole=this.myconsole.bind(this);
-    /* looks like I cannot use var there to declare local variable ...*/
-/*
-    this.time=this.time.bind(this);
-    this.tic=this.tic.bind(this);
-    this.tps=this.tps.bind(this);
- */
   }
 
 
@@ -34,10 +19,11 @@ class SIM908  {
     /* looks like that variable must be initated here */
     this.time=0;
     this.tic=0;
-    this.tps=0;
+    this.steps=25;
+    this.tps=this.steps;
     this.wait=0;
     this.status=0;
-    this.status=3;
+    //this.status=3;
 
     return new Promise(function (resolve/*, reject*/) {
       resolve();
@@ -68,7 +54,7 @@ class SIM908  {
     var _time=this.time;
 	var _tic=this.tic;
 	var _tps=this.tps;
-	var steps=20;
+	var steps=this.steps;
 	var _wait=this.wait;
 	var isteps=0.001/steps;
 	

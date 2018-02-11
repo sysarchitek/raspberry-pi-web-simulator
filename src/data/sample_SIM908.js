@@ -1,6 +1,6 @@
 /*
 * IoT Hub Raspberry Pi NodeJS - Microsoft Sample Code - Copyright (c) 2017 - Licensed MIT
-* 2018-02-11 mr.fturi@gmail.com added SIM908 geopos simulator and basic SdDisk device simulator
+* 2018-02-11 sysarchitek@gmail.com added SIM908 geopos simulator and basic SdDisk device simulator to "simulate" Azure Databox
 */
 const wpi = require('wiring-pi');
 const Client = require('azure-iot-device').Client;
@@ -21,7 +21,7 @@ const SDCARD_OPTION = {
 };
 
 // fturi begin : Azure MQTTP device 
-const connectionString = 'HostName=DataBoxHub.azure-devices.net;DeviceId=DataBoxDevice;SharedAccessKey=QNhUokaBq0FoSYAoCalyQD+tP2yl6CPGbR6kCL0oMy4=';
+const connectionString = 'HostName=DataBoxHub.azure-devices.net;DeviceId=DataBoxDevice;SharedAccessKey=[IOT device AccessKey]=';
 // fturi end : Azure MQTTP device
 const LEDPin = 4;
 
@@ -47,7 +47,7 @@ function getMessage(cb) {
 		&&
 			(data.longitude >= -73.5770 && data.longitude <= -73.5370)
 		);
-  _status=sensor.getState();
+    var _status=sensor.getState();
 	if (_client  && 2==_status)
 	  sensor.setState(_status=3);
 	if (_azure && 5==_status)
@@ -147,7 +147,7 @@ function onStop(request, response) {
 
   function react(cmd){
   var status=sensor.getState();
-  result="ok";
+  var result="ok";
   
   switch (cmd){
 	  case "order":
@@ -177,7 +177,6 @@ function onStop(request, response) {
 	  	}
 	  	break;
 	  case "fill":
-	    status=3;
 	  	switch (status)
 	  	{
 	  	case 3:
@@ -196,7 +195,7 @@ function onStop(request, response) {
   	    result="KO:cannot ship your databox now";
   	   break;
 	  case "upload":
-	    if (1==1)
+	    if (6==status)
 	    {
 	      upload_azure();
   	    status=1;
@@ -254,7 +253,8 @@ wpi.setup('wpi');
 wpi.pinMode(LEDPin, wpi.OUTPUT);
 sensor = new SIM908(SIM908_OPTION);
 sensor.init()
-  .then(function () {    sendingMessage = true;
+  .then(function () {
+    sendingMessage = true;
   })
   .catch(function (err) {
     console.error(err.message || err);

@@ -4,6 +4,12 @@ import Protocol from './mqtt.js';
 import wpi from './wiring-pi.js';
 import codeFactory from '../data/codeFactory.js';
 import BME280 from './bme280.js';
+import SIM908 from './sim908.js'; // fturi added sim908 library
+import SDCARD from './SdCard.js'; // fturi added SdCard library
+//import IOTHUB from './IotHub.js'; // fturi added EventHub library
+
+
+//fturi 1/3: DO import above library
 
 class ClientWrapper extends Client {
     constructor(transport,connStr,blobUploadClient) {
@@ -78,6 +84,8 @@ class Sample {
         }
     }
 
+    
+    //fturi 2/3 sed interpretor
     run(option) {
         // a prefix of UUID to avoid name conflict, here just use a fix one
         const prefix = '76f98350';
@@ -97,7 +105,16 @@ class Sample {
             }, {
                 src: /require\('bme280-sensor'\)/g,
                 dest: 'BME280'
-            }, {
+            }, { // fturi begin Added SIM908 and SDCARD declaration into raspbery emulator language
+                src: /require\('sim908-sensor'\)/g,
+                dest: 'SIM908'
+            }, { // fturi SDCARD declaration
+                src: /require\('SdCard-device'\)/g,
+                dest: 'SDCARD'
+            }, { // fturi SDCARD declaration
+                src: /require\('IotHub-service'\)/g,
+                dest: 'IOTHUB'
+            }, { // fturi end Added SIM908 and SDCARD declaration into raspbery emulator language
                 src: /console\.log/g,
                 dest: 'msgCb'
             }, {
@@ -106,6 +123,8 @@ class Sample {
             }
         ];
         wpi.setFunc(option.ledSwitch);
+        
+        //fturi 3/3 Import constants
         try {
             traceEvent('run-sample');
             var src = codeFactory.getRunCode('index', replaces, prefix);
@@ -116,6 +135,9 @@ class Sample {
                 Message: Message,
                 Protocol: Protocol,
                 BME280: BME280,
+                SIM908: SIM908, // fturi added SIM908 constants
+                SDCARD: SDCARD, // fturi added SDCARD constants
+  //              IOTHUB: IOTHUB, //fturi added EVENTHUB
                 msgCb: option.onMessage,
                 errCb: option.onError
             });
